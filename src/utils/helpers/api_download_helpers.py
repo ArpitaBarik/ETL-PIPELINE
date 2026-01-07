@@ -24,16 +24,12 @@ def request_api(
                 timeout=timeout
             )
 
-            print("API URL:", response.url)
-
-
-            # API CALL HAPPENS HERE
             response.raise_for_status()
-
             return response.status_code, response.json()
 
         except requests.exceptions.RequestException as err:
             if attempt == retries:
                 raise APIRequestError(err)
-
             time.sleep(2)
+
+

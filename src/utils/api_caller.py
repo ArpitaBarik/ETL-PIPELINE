@@ -1,14 +1,46 @@
+import os
+import sys
+
+# STEP 1: Find project root folder
+project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../..")
+)
+
+# STEP 2: Tell Python about project root
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+# STEP 3: Now this import will work
 from src.utils.helpers.api_download_helpers import request_api, APIRequestError
 
-try:
-    status, payload = request_api(
-        method="GET",
-        url="https://api.example.com/data",
-        params={"page": 1},
-        headers={"Accept": "application/json"},
-        timeout=8,
-        retries=4,
-    )
-    print(status, payload)
-except APIRequestError as err:
-    print("Request failed:", err)
+
+CENSUS_API_URL = "https://api.census.gov/data/2022/acs/acs5"
+CENSUS_API_KEY = "00200b6fdc213ea1ae3272478057c94cb3815637"
+
+
+def main():
+    try:
+        status, data = request_api(
+            method="GET",
+            url=CENSUS_API_URL,
+            params={
+                "get": "NAME,B01003_001E",
+                "for": "state:*",
+                "key": CENSUS_API_KEY
+            },
+            headers={"Accept": "application/json"},
+            timeout=8,
+            retries=3
+        )
+
+        print("Status:", status)
+        print("Data:")
+        for row in data[:5]:
+            print(row)
+
+    except APIRequestError as error:
+        print("API request failed:", error)
+
+
+if __name__ == "__main__":
+    main()
