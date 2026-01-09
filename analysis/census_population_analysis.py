@@ -52,7 +52,7 @@ def main():
         df = pl.DataFrame(
             rows,
             schema=headers,
-            orient="row"   # IMPORTANT
+            orient="row"   
         )
 
         df = df.rename(VARIABLE_LABELS)
