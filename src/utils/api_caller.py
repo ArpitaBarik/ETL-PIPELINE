@@ -1,16 +1,15 @@
 import os
 import sys
 
-# STEP 1: Find project root folder
+
 project_root = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "../../..")
 )
 
-# STEP 2: Tell Python about project root
+
 if project_root not in sys.path:
     sys.path.append(project_root)
 
-# STEP 3: Now this import will work
 from src.utils.helpers.api_download_helpers import request_api, APIRequestError
 
 
