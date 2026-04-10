@@ -1,11 +1,9 @@
 import os
 import sys
 
-
 project_root = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "../../..")
 )
-
 
 if project_root not in sys.path:
     sys.path.append(project_root)
@@ -18,13 +16,17 @@ CENSUS_API_KEY = "00200b6fdc213ea1ae3272478057c94cb3815637"
 
 
 def main():
+    variables = ["B23025_001E", "B23025_002E"]
+
     try:
         status, data = request_api(
             method="GET",
             url=CENSUS_API_URL,
             params={
-                "get": "NAME,B01003_001E",
-                "for": "state:*",
+                "get": "NAME," + ",".join(variables),
+
+                "for": "metropolitan statistical area/micropolitan statistical area:*",
+
                 "key": CENSUS_API_KEY
             },
             headers={"Accept": "application/json"},
