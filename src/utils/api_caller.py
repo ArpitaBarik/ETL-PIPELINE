@@ -22,11 +22,12 @@ def main():
         status, data = request_api(
             method="GET",
             url=CENSUS_API_URL,
-            params={
-                "get": "NAME,B01003_001E",
-                "for": "state:*",
+            params = {
+                "get": "NAME,B23025_001E,B23025_002E",
+                "for": "metropolitan statistical area/micropolitan statistical area:*",
                 "key": CENSUS_API_KEY
-            },
+                },
+
             headers={"Accept": "application/json"},
             timeout=8,
             retries=3
