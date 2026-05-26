@@ -1,4 +1,4 @@
-NAME,B08006_001E,B08006_002E,B08006_003E,B08006_004E,B08006_005E,B08006_006E,B08006_007E,B08006_008E,B08006_009E,B08006_010E,B08006_011E,B08006_012E,B08006_013E,B08006_014E,B08006_015E,metropolitan statistical area/micropolitan statistical area
+metro_area,total_workers,car_truck_or_van,drove_alone,carpooled,public_transportation,bus,subway_or_rail,taxi,motorcycle,bicycle,walked,other_means,worked_from_home,other,worked_from_home_extended,metro_area_id
 "Aberdeen, SD Micro Area",22377,19725,18036,1689,1289,276,124,42,42,0,0,0,0,63,911,10100
 "Aberdeen, WA Micro Area",28624,24319,22051,2268,1908,234,126,309,309,0,0,0,0,243,1119,10140
 "Abilene, TX Metro Area",82753,74070,64907,9163,6639,1392,1132,289,262,0,0,0,27,394,1416,10180

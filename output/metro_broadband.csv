@@ -1,4 +1,4 @@
-NAME,B28002_001E,B28002_002E,B28002_003E,B28002_004E,B28002_005E,B28002_006E,B28002_007E,B28002_008E,B28002_009E,B28002_010E,B28002_011E,B28002_012E,B28002_013E,metropolitan statistical area/micropolitan statistical area
+metro_area,total,with_internet_subscription,dial_up_with_no_other_internet_subscription,broadband_of_any_type,cellular_data_plan,cellular_data_plan_only,broadband_cable_fiber_or_dsl,broadband_cable_fiber_or_dsl_only,satellite_internet_service,satellite_internet_service_only,other_service_only,internet_access_without_subscription,no_internet_access,metro_area_id
 "Aberdeen, SD Micro Area",17577,15100,32,15068,13695,1977,12205,1234,1079,96,26,519,1958,10100
 "Aberdeen, WA Micro Area",29542,25898,62,25836,23278,3623,21019,2313,1518,158,8,770,2874,10140
 "Abilene, TX Metro Area",65075,57334,72,57262,54196,9821,44178,2558,4988,299,42,1240,6501,10180

@@ -1,4 +1,4 @@
-NAME,B23025_001E,B23025_002E,B23025_003E,B23025_004E,B23025_005E,B23025_006E,B23025_007E,metropolitan statistical area/micropolitan statistical area
+metro_area,total,in_labor_force,civilian_labor_force,civilian_employed,civilian_unemployed,armed_forces,not_in_labor_force,metro_area_id
 "Aberdeen, SD Micro Area",33642,23522,23489,22673,816,33,10120,10100
 "Aberdeen, WA Micro Area",62265,31365,31293,29300,1993,72,30900,10140
 "Abilene, TX Metro Area",139671,85989,81023,78778,2245,4966,53682,10180
