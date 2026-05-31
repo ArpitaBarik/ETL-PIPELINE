@@ -2,20 +2,26 @@ import requests
 import polars as pl
 
 
-# CONFIG
-
 API_KEY = "00200b6fdc213ea1ae3272478057c94cb3815637"
-BASE_URL = "https://api.census.gov/data/2022/acs/acs5"
+
+# MULTIPLE YEARS
+YEARS = ["2019", "2021", "2022"]
 
 # METROPOLITAN LEVEL
 GEOGRAPHY = "metropolitan statistical area/micropolitan statistical area:*"
 
 
-# COMMON FUNCTION
-
-def download_table(table_name, variables, output_file, column_mapping):
+def download_table(
+    base_url,
+    table_name,
+    variables,
+    output_file,
+    column_mapping,
+    year
+):
 
     print(f"\nDownloading: {table_name}")
+    print(f"Year: {year}")
 
     params = {
         "get": "NAME," + ",".join(variables),
@@ -23,23 +29,36 @@ def download_table(table_name, variables, output_file, column_mapping):
         "key": API_KEY
     }
 
-    response = requests.get(BASE_URL, params=params)
+    response = requests.get(base_url, params=params)
+
     response.raise_for_status()
 
     data = response.json()
 
     headers = data[0]
+
     rows = data[1:]
 
     # Create DataFrame
-    df = pl.DataFrame(rows, schema=headers, orient="row")
+    df = pl.DataFrame(
+        rows,
+        schema=headers,
+        orient="row"
+    )
 
-    # Rename columns to human-readable names
+    # Add year column
+    df = df.with_columns(
+        pl.lit(year).alias("year")
+    )
+
+    # Rename columns
     df = df.rename(column_mapping)
 
     # Convert numeric columns
     for col in df.columns:
-        if col != "metro_area":
+
+        if col not in ["metro_area", "year"]:
+
             df = df.with_columns(
                 pl.col(col).cast(pl.Int64, strict=False)
             )
@@ -63,6 +82,8 @@ def download_table(table_name, variables, output_file, column_mapping):
 
     print(f"\nSaved to {output_file}")
 
+
+# EMPLOYMENT VARIABLES
 employment_vars = [
     "B23025_001E",
     "B23025_002E",
@@ -74,26 +95,30 @@ employment_vars = [
 ]
 
 employment_column_mapping = {
+
     "NAME": "metro_area",
+
     "B23025_001E": "total",
+
     "B23025_002E": "in_labor_force",
+
     "B23025_003E": "civilian_labor_force",
+
     "B23025_004E": "civilian_employed",
+
     "B23025_005E": "civilian_unemployed",
+
     "B23025_006E": "armed_forces",
+
     "B23025_007E": "not_in_labor_force",
+
     "metropolitan statistical area/micropolitan statistical area":
         "metro_area_id"
 }
 
-download_table(
-    "Employment (B23025)",
-    employment_vars,
-    "output/metro_employment.csv",
-    employment_column_mapping
-)
 
 
+# BROADBAND VARIABLES
 broadband_vars = [
     "B28002_001E",
     "B28002_002E",
@@ -111,6 +136,7 @@ broadband_vars = [
 ]
 
 broadband_column_mapping = {
+
     "NAME": "metro_area",
 
     "B28002_001E": "total",
@@ -149,18 +175,14 @@ broadband_column_mapping = {
 
     "B28002_013E":
         "no_internet_access",
-        
+
     "metropolitan statistical area/micropolitan statistical area":
         "metro_area_id"
 }
 
-download_table(
-    "Broadband (B28002)",
-    broadband_vars,
-    "output/metro_broadband.csv",
-    broadband_column_mapping
-)
 
+
+# COMMUTE VARIABLES
 commute_vars = [
     "B08006_001E",
     "B08006_002E",
@@ -180,6 +202,7 @@ commute_vars = [
 ]
 
 commute_column_mapping = {
+
     "NAME": "metro_area",
 
     "B08006_001E": "total_workers",
@@ -216,12 +239,43 @@ commute_column_mapping = {
         "metro_area_id"
 }
 
-download_table(
-    "Commute (B08006)",
-    commute_vars,
-    "output/metro_commute.csv",
-    commute_column_mapping
-)
+
+
+#LOOP
+for year in YEARS:
+
+    BASE_URL = f"https://api.census.gov/data/{year}/acs/acs5"
+
+    print(f"\nProcessing Year: {year}")
+
+    #Employment table 
+    download_table(
+        BASE_URL,
+        "Employment (B23025)",
+        employment_vars,
+        f"output/{year}_metro_employment.csv",
+        employment_column_mapping,
+        year
+    )
+    #Broadband table
+    download_table(
+        BASE_URL,
+        "Broadband (B28002)",
+        broadband_vars,
+        f"output/{year}_metro_broadband.csv",
+        broadband_column_mapping,
+        year
+    )
+
+    #commute table
+    download_table(
+        BASE_URL,
+        "Commute (B08006)",
+        commute_vars,
+        f"output/{year}_metro_commute.csv",
+        commute_column_mapping,
+        year
+    )
 
 
 print("\nALL TABLES DOWNLOADED SUCCESSFULLY")
