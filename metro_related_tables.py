@@ -5,7 +5,7 @@ import polars as pl
 API_KEY = "00200b6fdc213ea1ae3272478057c94cb3815637"
 
 # MULTIPLE YEARS
-YEARS = ["2019", "2021", "2022"]
+YEARS = ["2020", "2021", "2022"]
 
 # METROPOLITAN LEVEL
 GEOGRAPHY = "metropolitan statistical area/micropolitan statistical area:*"
@@ -15,7 +15,8 @@ def download_table(
     base_url,
     table_name,
     variables,
-    output_file,
+    csv_file,
+    parquet_file,
     column_mapping,
     year
 ):
@@ -78,9 +79,14 @@ def download_table(
     print(df.columns)
 
     # Save CSV
-    df.write_csv(output_file)
+    df.write_csv(csv_file)
 
-    print(f"\nSaved to {output_file}")
+     # Save Parquet
+    df.write_parquet(parquet_file)
+
+    print(f"\nSaved to {csv_file}")
+
+    print(f"Parquet Saved: {parquet_file}")
 
 
 # EMPLOYMENT VARIABLES
@@ -239,6 +245,99 @@ commute_column_mapping = {
         "metro_area_id"
 }
 
+# DATATYPE DOCUMENTATION
+
+datatype_mapping = {
+
+    # COMMON COLUMNS
+    "metro_area": "String",
+
+    "metro_area_id": "String/Int64",
+
+    "year": "Int64",
+
+    # EMPLOYMENT TABLE
+    "total": "Int64",
+
+    "in_labor_force": "Int64",
+
+    "civilian_labor_force": "Int64",
+
+    "civilian_employed": "Int64",
+
+    "civilian_unemployed": "Int64",
+
+    "armed_forces": "Int64",
+
+    "not_in_labor_force": "Int64",
+
+    # BROADBAND TABLE
+    "with_internet_subscription": "Int64",
+
+    "dial_up_with_no_other_internet_subscription": "Int64",
+
+    "broadband_of_any_type": "Int64",
+
+    "cellular_data_plan": "Int64",
+
+    "cellular_data_plan_only": "Int64",
+
+    "broadband_cable_fiber_or_dsl": "Int64",
+
+    "broadband_cable_fiber_or_dsl_only": "Int64",
+
+    "satellite_internet_service": "Int64",
+
+    "satellite_internet_service_only": "Int64",
+
+    "other_service_only": "Int64",
+
+    "internet_access_without_subscription": "Int64",
+
+    "no_internet_access": "Int64",
+
+    # COMMUTE TABLE
+    "total_workers": "Int64",
+
+    "car_truck_or_van": "Int64",
+
+    "drove_alone": "Int64",
+
+    "carpooled": "Int64",
+
+    "public_transportation": "Int64",
+
+    "bus": "Int64",
+
+    "subway_or_rail": "Int64",
+
+    "taxi": "Int64",
+
+    "motorcycle": "Int64",
+
+    "bicycle": "Int64",
+
+    "walked": "Int64",
+
+    "other_means": "Int64",
+
+    "worked_from_home": "Int64",
+
+    "other": "Int64",
+
+    "worked_from_home_extended": "Int64"
+}
+
+datatype_df = pl.DataFrame({
+
+    "column_name": list(datatype_mapping.keys()),
+
+    "datatype": list(datatype_mapping.values())
+})
+
+print("\nDatatype Documentation:")
+
+print(datatype_df)
 
 
 #LOOP
@@ -254,6 +353,7 @@ for year in YEARS:
         "Employment (B23025)",
         employment_vars,
         f"output/{year}_metro_employment.csv",
+        f"output/{year}_metro_employment.parquet",
         employment_column_mapping,
         year
     )
@@ -263,6 +363,7 @@ for year in YEARS:
         "Broadband (B28002)",
         broadband_vars,
         f"output/{year}_metro_broadband.csv",
+        f"output/{year}_metro_broadband.parquet",
         broadband_column_mapping,
         year
     )
@@ -273,6 +374,7 @@ for year in YEARS:
         "Commute (B08006)",
         commute_vars,
         f"output/{year}_metro_commute.csv",
+        f"output/{year}_metro_commute.parquet",
         commute_column_mapping,
         year
     )
