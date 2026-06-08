@@ -20,19 +20,17 @@ def main():
 
     try:
         status, data = request_api(
-            method="GET",
-            url=CENSUS_API_URL,
-            params={
-                "get": "NAME," + ",".join(variables),
-
-                "for": "metropolitan statistical area/micropolitan statistical area:*",
-
-                "key": CENSUS_API_KEY
-            },
-            headers={"Accept": "application/json"},
-            timeout=8,
-            retries=3
-        )
+    method="GET",
+    url=CENSUS_API_URL,
+    params={
+        "get": "NAME," + ",".join(variables) if variables else "NAME,B23025_001E,B23025_002E",
+        "for": "metropolitan statistical area/micropolitan statistical area:*",
+        "key": CENSUS_API_KEY
+    },
+    headers={"Accept": "application/json"},
+    timeout=8,
+    retries=3
+)
 
         print("Status:", status)
         print("Data:")
