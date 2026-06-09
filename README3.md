@@ -11,7 +11,6 @@ This project extracts metropolitan-level data from the U.S. Census American Comm
 The extracted data is cleaned, converted into appropriate datatypes, and stored as staging datasets for further analysis and data modeling.
 
 ---
-
 # Data Source
 
 Official ACS API Documentation:
@@ -35,7 +34,7 @@ Source Column: NAME
 
 Datatype: String
 
-Justification: The NAME field contains the descriptive name of the metropolitan or micropolitan area (e.g., "Abilene, TX Metro Area"). Since this field stores textual information rather than numeric values, the String datatype is used.
+Justification: The NAME field contains the descriptive name of the metropolitan or micropolitan area (e.g. "Abilene, TX Metro Area"). Since this field stores textual information rather than numeric values, the String datatype is used.
 ---
 
 2. metro_area_id
@@ -44,7 +43,7 @@ Source Column: metropolitan statistical area/micropolitan statistical area
 
 Datatype: Int64
 
-Justification: This column contains the unique Census geographic identifier assigned to each metropolitan or micropolitan area. Since the values are numeric identifiers and may be used as keys for joining datasets during data modeling, Int64 is the appropriate datatype.
+Justification: This column contains the unique Census geographic identifier assigned to each metropolitan or micropolitan area. Since the values are numeric identifiers, Int64 is the appropriate datatype.
 
 3. Employment Variables (B23025)
 
@@ -104,8 +103,6 @@ The values represent counts of people or households.
 These fields will be used for aggregations, calculations, and reporting.
 Int64 supports large population values without loss of precision.
 Numeric datatypes improve query performance and analytical processing compared to strings.
-
-# Column Mapping Justification
 
 # Column Mapping Justification
 
