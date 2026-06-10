@@ -1,11 +1,5 @@
 # Code Enhancement Summary
 
-## Overview
-
-The original Census ACS extraction pipeline was reviewed and improved to increase security, reliability, data quality validation, and Census documentation accuracy.
-
----
-
 # Change 1: Output Directory Validation
 
 ## Updated Version
@@ -21,7 +15,6 @@ os.makedirs("output", exist_ok=True)
 * Improves pipeline reliability.
 
 ---
-
 # Change 2: Protection of Geographic Keys
 
 ## Previous Version
@@ -167,18 +160,6 @@ Corrected and Expanded
 
 Several commute labels were updated after validating the official Census definitions.
 
-### Corrections
-
-| Previous Label   | Updated Label                        |
-| ---------------- | ------------------------------------ |
-| subway_or_rail   | long_distance_train_or_commuter_rail |
-| taxi             | light_rail_streetcar_or_trolley      |
-| motorcycle       | ferryboat                            |
-| bicycle          | taxicab                              |
-| walked           | motorcycle                           |
-| other_means      | bicycle                              |
-| worked_from_home | walked                               |
-
 ### Added Variables
 
 | Variable    | New Column                |
@@ -208,22 +189,3 @@ YEARS = ["2019", "2021", "2022"]
 * Supports trend analysis.
 * Enables year-over-year comparisons.
 * Introduces a future Time Dimension for data modeling.
-
----
-
-# Impact on Data Modeling
-
-The updated pipeline produces cleaner and more reliable staging datasets.
-
-The following dimensions are now clearly identifiable:
-
-* Metro Area
-* Year
-
-The following fact domains are available:
-
-* Employment
-* Broadband
-* Commute
-
-This improvement prepares the staging layer for future star schema implementation and analytical reporting.
