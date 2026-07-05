@@ -4,7 +4,7 @@ import polars as pl
 # CREATE POSTGRES CONNECTION
 
 engine = create_engine(
-    "postgresql://postgres:Arpita123@localhost:5432/census_dw"
+    "postgresql://postgres:Barik123@localhost:5432/metro_pipeline"
 )
 
 # READ STAR SCHEMA TABLES
