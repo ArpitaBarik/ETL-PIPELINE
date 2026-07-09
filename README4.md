@@ -427,7 +427,7 @@ CREATE INDEX idx_fact_geo       ON fact_metro (geo_level_id);
 
 * Before indexing
 
-![Before Index](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/04_before_index (2).png)
+![Before Index](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/04_before_index.png)
 
 * After indexing
 
