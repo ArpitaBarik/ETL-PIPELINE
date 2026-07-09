@@ -10,6 +10,8 @@
 - [ETL Phase](#etl-phase)
 - [Data Quality Validation](#data-quality-validation)
 - [Analysis Phase](#analysis-phase)
+- [Materialized Views](#materialized-views)
+- [Data Marts](#data-marts)
 - [Reporting Phase](#reporting-phase)
 - [License](#license)
 
@@ -33,7 +35,8 @@ The three domains analysed across **2019, 2021, and 2022** (Pre-Pandemic → Pos
 2. **ETL (Extract, Transform, Load)** — Pull raw data from the Census API, clean and type-cast it, build a star schema, and load all dimension and fact tables into PostgreSQL.
 3. **Data Quality Validation** — Run null checks, duplicate checks, primary key uniqueness, and referential integrity checks across all tables.
 4. **Analysis** — Query the PostgreSQL warehouse using SQL to produce cross-domain insights.
-5. **Reporting** — Visualise findings through Python charts.
+5. **Materialized Views** — Create pre-computed, performance-ready views on top of the star schema.
+6. **Data Marts** — Build domain-specific serving tables for business consumption.
 
 ---
 
@@ -420,12 +423,11 @@ An index is applied on the most frequently joined columns to improve read perfor
 CREATE INDEX idx_fact_date      ON fact_metro (date_id);
 CREATE INDEX idx_fact_metro     ON fact_metro (metro_area_id);
 CREATE INDEX idx_fact_geo       ON fact_metro (geo_level_id);
-CREATE INDEX idx_dim_state_code ON dim_metro_area (state_code);
 ```
 
 * Before indexing
 
-![Before Index](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/04_before_index.png)
+![Before Index](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/04_before_index (2).png)
 
 * After indexing
 
@@ -434,6 +436,80 @@ CREATE INDEX idx_dim_state_code ON dim_metro_area (state_code);
 * Index creation
 
 ![Indexing](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/06_indexing.png)
+
+---
+
+## Materialized Views
+
+Three materialized views are created on top of the star schema in PostgreSQL using `create_materialized_views.sql`. They provide pre-computed, instantly queryable aggregations — making data readily available, consumable, and performance-ready without requiring users to write complex JOINs.
+
+| View | Key Calculated Columns |
+|---|---|
+| `mv_employment_trend` | `unemployment_rate`, `employment_rate`, `labor_force_participation_rate` |
+| `mv_broadband_adoption` | `broadband_adoption_rate`, `no_internet_rate`, `cellular_adoption_rate` |
+| `mv_remote_work_pattern` | `wfh_rate`, `drove_alone_rate`, `public_transport_rate`, `carpool_rate` |
+
+### Why Materialized Views
+
+| Property | How Solved |
+|---|---|
+| Readily Available | Lives in PostgreSQL as a real queryable object |
+| Consumable | Pre-joined and pre-aggregated — simple SELECT, no JOIN needed |
+| Performance-Ready | Physically stored result — instant reads |
+
+### How to Run
+
+Open `create_materialized_views.sql` in pgAdmin Query Tool and press **F5**.
+
+### Materialized Views Created in pgAdmin
+
+![Materialized Views](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/mv_created.png)
+
+### Refresh When New Data Arrives
+
+```sql
+REFRESH MATERIALIZED VIEW mv_employment_trend;
+REFRESH MATERIALIZED VIEW mv_broadband_adoption;
+REFRESH MATERIALIZED VIEW mv_remote_work_pattern;
+```
+
+---
+
+## Data Marts
+
+Three domain-specific data mart tables are built on top of the materialized views using `create_data_mart.sql`. They serve as the final business-ready serving layer before connecting to BI tools like Power BI.
+
+| Table | Source View | Business Question Answered |
+|---|---|---|
+| `mart_employment` | `mv_employment_trend` | How did employment and unemployment change pre vs post pandemic? |
+| `mart_broadband` | `mv_broadband_adoption` | How did broadband access and internet adoption change? |
+| `mart_commute` | `mv_remote_work_pattern` | How did commute patterns and work-from-home rates change? |
+
+### How to Run
+
+Open `create_data_mart.sql` in pgAdmin Query Tool and press **F5**.
+
+### Data Mart Tables Created in pgAdmin
+
+![Data Mart Tables](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/data_mart_created.png)
+
+### Sample Query — Work From Home Growth by State
+
+```sql
+SELECT state_code,
+       MAX(CASE WHEN year = '2019' THEN wfh_rate END) AS wfh_2019,
+       MAX(CASE WHEN year = '2022' THEN wfh_rate END) AS wfh_2022,
+       ROUND(
+           MAX(CASE WHEN year = '2022' THEN wfh_rate END) -
+           MAX(CASE WHEN year = '2019' THEN wfh_rate END), 2
+       ) AS wfh_growth
+FROM mart_commute
+GROUP BY state_code
+ORDER BY wfh_growth DESC
+LIMIT 10;
+```
+
+![Data Mart Sample Query](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/data_mart_sample_query.png)
 
 ---
 
@@ -474,6 +550,11 @@ ETL-PIPELINE/
 │   └── fact_metro.parquet / .csv
 ├── analysis/                        # PostgreSQL query scripts
 ├── screenshots/                     # All screenshots used in this README
+├── create_materialized_views.sql    # Creates 3 materialized views
+├── validate_materialized_views.sql  # Validates MV row counts and nulls
+├── refresh_materialized_views.sql   # Refreshes MVs when new data arrives
+├── create_data_mart.sql             # Creates 3 data mart tables
+├── sample_queries.sql               # Ready-to-use business queries
 ├── ACS_RESEARCH.md
 ├── pipeline_enhancements.md
 └── README.md
