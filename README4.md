@@ -67,7 +67,6 @@ All data is sourced from the **U.S. Census Bureau — American Community Survey 
 - **Apache Parquet** — intermediate columnar storage format
 - **PostgreSQL** — relational data warehouse for the final star schema
 - **SQLAlchemy** — Python database connector for loading tables into PostgreSQL
-- **Matplotlib / Plotly** — Python chart libraries for reporting and visualization
 
 ---
 
@@ -163,7 +162,7 @@ Before writing any code, the correct ACS tables were identified using the offici
 | B28002_006E | satellite_internet_service |
 | B28002_013E | no_internet_access |
 
-210
+
 **Commute — B08006**
 
 | ACS Variable | Renamed Column |
@@ -440,27 +439,9 @@ CREATE INDEX idx_dim_state_code ON dim_metro_area (state_code);
 
 ## Reporting Phase
 
-The reporting layer connects directly to PostgreSQL and visualises results using Python charts.
+The reporting layer connects directly to the PostgreSQL metro_pipeline database. All analytical queries from the Analysis Phase serve as the foundation for reporting.
 
-### Python Charts
-
-Query results are pulled from PostgreSQL into Polars and visualised.
-
-* Total civilian employment by year — bar chart with pandemic period labels
-
-![Employment Chart](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/chart_employment.png)
-
-* Work-from-home growth 2019 → 2022 — line chart by state
-
-![WFH Chart](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/chart_wfh.png)
-
-* Broadband adoption rate distribution — histogram across all metro areas
-
-![Broadband Chart](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/chart_broadband.png)
-
-* Commute mode breakdown — stacked bar chart comparing 2019 vs 2022
-
-![Commute Chart](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/chart_commute.png)
+Query results can be exported from pgAdmin using the download button in the Data Output tab as CSV or JSON for use in any reporting tool.
 
 ---
 
