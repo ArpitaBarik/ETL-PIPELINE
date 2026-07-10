@@ -1,0 +1,53 @@
+state_id,state_code,state_name
+1,1,Alabama
+2,2,Alaska
+3,4,Arizona
+4,5,Arkansas
+5,6,California
+6,8,Colorado
+7,9,Connecticut
+8,10,Delaware
+9,11,District of Columbia
+10,12,Florida
+11,13,Georgia
+12,15,Hawaii
+13,16,Idaho
+14,17,Illinois
+15,18,Indiana
+16,19,Iowa
+17,20,Kansas
+18,21,Kentucky
+19,22,Louisiana
+20,23,Maine
+21,24,Maryland
+22,25,Massachusetts
+23,26,Michigan
+24,27,Minnesota
+25,28,Mississippi
+26,29,Missouri
+27,30,Montana
+28,31,Nebraska
+29,32,Nevada
+30,33,New Hampshire
+31,34,New Jersey
+32,35,New Mexico
+33,36,New York
+34,37,North Carolina
+35,38,North Dakota
+36,39,Ohio
+37,40,Oklahoma
+38,41,Oregon
+39,42,Pennsylvania
+40,44,Rhode Island
+41,45,South Carolina
+42,46,South Dakota
+43,47,Tennessee
+44,48,Texas
+45,49,Utah
+46,50,Vermont
+47,51,Virginia
+48,53,Washington
+49,54,West Virginia
+50,55,Wisconsin
+51,56,Wyoming
+52,72,Puerto Rico
