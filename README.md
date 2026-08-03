@@ -48,7 +48,7 @@ The three domains analysed across **2019, 2021, and 2022** (Pre-Pandemic → Pos
 
 The animated diagram below shows the end-to-end flow of the pipeline — from data extraction out of the Census API, through transformation with Python and Polars, loading into the PostgreSQL snowflake schema, data quality validation, materialized views, and finally the BI-ready data marts.
 
-![ETL Pipeline Architecture](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/architecture-demo.gif?raw=true)
+![ETL Pipeline Architecture](screenshots/architecture-demo.gif)
 
 **Flow:** Census API → ETL Engine (Python & Polars) → PostgreSQL Warehouse (Snowflake schema) → Data Quality Validation → Materialized Views → Data Marts (BI-ready output)
 
