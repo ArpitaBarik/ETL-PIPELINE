@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Project Phases](#project-phases)
+- [Architecture Overview](#architecture-overview)
 - [Data Source](#data-source)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
@@ -40,6 +41,16 @@ The three domains analysed across **2019, 2021, and 2022** (Pre-Pandemic → Pos
 4. **Analysis** — Query the PostgreSQL warehouse using SQL to produce cross-domain insights.
 5. **Materialized Views** — Create pre-computed, performance-ready views on top of the schema.
 6. **Data Marts** — Build domain-specific serving tables for business consumption.
+
+---
+
+## Architecture Overview
+
+The animated diagram below shows the end-to-end flow of the pipeline — from data extraction out of the Census API, through transformation with Python and Polars, loading into the PostgreSQL snowflake schema, data quality validation, materialized views, and finally the BI-ready data marts.
+
+![ETL Pipeline Architecture](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/architecture-demo.gif?raw=true)
+
+**Flow:** Census API → ETL Engine (Python & Polars) → PostgreSQL Warehouse (Snowflake schema) → Data Quality Validation → Materialized Views → Data Marts (BI-ready output)
 
 ---
 
@@ -650,5 +661,4 @@ This section preserves that history now that the earlier standalone READMEs have
 ## License
 
 This project is licensed under the MIT License.
-
 
