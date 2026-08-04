@@ -453,7 +453,7 @@ SELECT s.state_name,
 FROM fact_metro f
 JOIN dim_date       d ON f.date_id       = d.date_id
 JOIN dim_metro_area m ON f.metro_area_id = m.metro_area_id
-JOIN dim_state      s ON m.state_code    = s.state_code
+JOIN dim_state      s ON m.state_code    = s.state_abbr
 GROUP BY s.state_name, d.year
 ORDER BY s.state_name, d.year;
 ```
