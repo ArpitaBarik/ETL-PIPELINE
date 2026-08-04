@@ -18,7 +18,6 @@
 - [Project File Structure](#project-file-structure)
 - [Project History](#project-history)
 - [License](#license)
-
 ---
 
 ## Introduction
@@ -458,7 +457,7 @@ GROUP BY s.state_name, d.year
 ORDER BY s.state_name, d.year;
 ```
 
-![WFH Shift Query](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/analysis_wfh_shift.png)
+![WFH Shift Query](screenshots/analysis_wfh_shift.png)
 
 ---
 
