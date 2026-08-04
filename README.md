@@ -298,7 +298,7 @@ Covers every calendar day across 2019, 2021, and 2022. Includes `period_label` t
 
 Static lookup table distinguishing Metropolitan from Micropolitan Statistical Areas.
 
-![ETL dim_geo_level](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/etl_dim_geo_level.png)
+![ETL dim_geo_level](screenshots/etl_dim_geo_level.png)
 
 * **dim_metro_area** — `build_dim_metro_area.py`
 
