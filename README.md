@@ -467,7 +467,7 @@ ORDER BY s.state_name, d.year;
 SELECT m.metro_area_name,
        ROUND(
            SUM(f.broadband_of_any_type) * 100.0
-           / NULLIF(SUM(f.total_households), 0),
+           / NULLIF(SUM(f.brd_total), 0),
        1) AS broadband_pct
 FROM fact_metro f
 JOIN dim_metro_area m ON f.metro_area_id = m.metro_area_id
@@ -476,8 +476,7 @@ ORDER BY broadband_pct DESC
 LIMIT 10;
 ```
 
-![Broadband Adoption Rate Query](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/analysis_broadband_top10.png)
-
+![WFH Shift Query](screenshots/analysis_wfh_shift.png)
 ---
 
 ### Query 5 — Commute mode breakdown across all years
