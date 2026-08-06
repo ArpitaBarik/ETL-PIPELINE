@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Project Phases](#project-phases)
+- [Architecture Overview](#architecture-overview)
 - [Data Source](#data-source)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
@@ -17,7 +18,6 @@
 - [Project File Structure](#project-file-structure)
 - [Project History](#project-history)
 - [License](#license)
-
 ---
 
 ## Introduction
@@ -40,6 +40,16 @@ The three domains analysed across **2019, 2021, and 2022** (Pre-Pandemic → Pos
 4. **Analysis** — Query the PostgreSQL warehouse using SQL to produce cross-domain insights.
 5. **Materialized Views** — Create pre-computed, performance-ready views on top of the schema.
 6. **Data Marts** — Build domain-specific serving tables for business consumption.
+
+---
+
+## Architecture Overview
+
+The animated diagram below shows the end-to-end flow of the pipeline — from data extraction out of the Census API, through transformation with Python and Polars, loading into the PostgreSQL snowflake schema, data quality validation, materialized views, and finally the BI-ready data marts.
+
+![ETL Pipeline Architecture](screenshots/architecture-demo.gif)
+
+**Flow:** Census API → ETL Engine (Python & Polars) → PostgreSQL Warehouse (Snowflake schema) → Data Quality Validation → Materialized Views → Data Marts (BI-ready output)
 
 ---
 
@@ -288,7 +298,7 @@ Covers every calendar day across 2019, 2021, and 2022. Includes `period_label` t
 
 Static lookup table distinguishing Metropolitan from Micropolitan Statistical Areas.
 
-![ETL dim_geo_level](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/etl_dim_geo_level.png)
+![ETL dim_geo_level](screenshots/etl_dim_geo_level.png)
 
 * **dim_metro_area** — `build_dim_metro_area.py`
 
@@ -442,12 +452,12 @@ SELECT s.state_name,
 FROM fact_metro f
 JOIN dim_date       d ON f.date_id       = d.date_id
 JOIN dim_metro_area m ON f.metro_area_id = m.metro_area_id
-JOIN dim_state      s ON m.state_code    = s.state_code
+JOIN dim_state      s ON m.state_code    = s.state_abbr
 GROUP BY s.state_name, d.year
 ORDER BY s.state_name, d.year;
 ```
 
-![WFH Shift Query](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/analysis_wfh_shift.png)
+![WFH Shift Query](screenshots/analysis_wfh_shift.png)
 
 ---
 
@@ -457,7 +467,7 @@ ORDER BY s.state_name, d.year;
 SELECT m.metro_area_name,
        ROUND(
            SUM(f.broadband_of_any_type) * 100.0
-           / NULLIF(SUM(f.total_households), 0),
+           / NULLIF(SUM(f.brd_total), 0),
        1) AS broadband_pct
 FROM fact_metro f
 JOIN dim_metro_area m ON f.metro_area_id = m.metro_area_id
@@ -466,8 +476,7 @@ ORDER BY broadband_pct DESC
 LIMIT 10;
 ```
 
-![Broadband Adoption Rate Query](https://github.com/ArpitaBarik/ETL-PIPELINE/blob/dev/screenshots/analysis_broadband_top10.png)
-
+![WFH Shift Query](screenshots/analysis_wfh_shift.png)
 ---
 
 ### Query 5 — Commute mode breakdown across all years
@@ -650,5 +659,4 @@ This section preserves that history now that the earlier standalone READMEs have
 ## License
 
 This project is licensed under the MIT License.
-
 
